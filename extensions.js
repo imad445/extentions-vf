@@ -1443,10 +1443,27 @@ export const MultiOptionsExtension = {
           margin-left: 10px;
         }
         input[type="checkbox"] {
-          margin-right: 10px;
+          display: none;
         }
         .option {
+          display: flex;
+          align-items: center;
           margin-bottom: 15px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          transition: border-color 0.3s ease, background-color 0.3s ease;
+          cursor: pointer;
+        }
+        .option:hover {
+          border-color: #ccc;
+        }
+        .option input[type="checkbox"]:checked + label {
+          color: white;
+        }
+        .option input[type="checkbox"]:checked + label::before {
+          background-color: #e60000;
+          border-color: #cc0000;
         }
         .submit {
           background: linear-gradient(to right, #e60000, #cc0000);
@@ -1476,6 +1493,28 @@ export const MultiOptionsExtension = {
           text-align: center;
           margin-bottom: 20px;
           font-weight: bold;
+        }
+        .option input[type="checkbox"] + label {
+          position: relative;
+          padding-left: 25px;
+          cursor: pointer;
+        }
+        .option input[type="checkbox"] + label::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          width: 16px;
+          height: 16px;
+          border: 2px solid #ccc;
+          border-radius: 3px;
+          background-color: #fff;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .option input[type="checkbox"]:checked + label::before {
+          background-color: #e60000;
+          border-color: #cc0000;
         }
       </style>
 
@@ -1535,4 +1574,3 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
-
