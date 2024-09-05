@@ -1597,4 +1597,3 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
-
