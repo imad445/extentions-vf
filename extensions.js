@@ -1460,6 +1460,7 @@ export const MultiOptionsExtension = {
           transition: background-color 0.3s ease, border-color 0.3s ease;
           cursor: pointer;
           background-color: #f9f9f9;
+          position: relative;
         }
         .option:hover {
           border-color: #ccc;
@@ -1467,7 +1468,6 @@ export const MultiOptionsExtension = {
         .option input[type="checkbox"]:checked + label {
           color: #e60000;
         }
-        /* Modern checkbox design */
         .option input[type="checkbox"] + label::before {
           content: '';
           position: absolute;
@@ -1485,7 +1485,6 @@ export const MultiOptionsExtension = {
           border-color: #e60000;
           background-color: #e60000;
         }
-        /* Checkmark */
         .option input[type="checkbox"]:checked + label::after {
           content: '✔';
           position: absolute;
@@ -1567,6 +1566,15 @@ export const MultiOptionsExtension = {
 
       <div class="error-message">Please select at least one option.</div>
     `;
+
+    // Add click event listeners to each option
+    formContainer.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', () => {
+        const checkbox = option.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change')); // Trigger change event for styling
+      });
+    });
 
     formContainer.addEventListener('submit', function (event) {
       event.preventDefault();
