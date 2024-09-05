@@ -224,9 +224,9 @@ export const FormExtension = {
     form.addEventListener('submit', function (event) {
       event.preventDefault()
 
-      const name = form.querySelector('.name')
-      const email = form.querySelector('.email')
-      const phone = form.querySelector('.phone')
+      const name = form.querySelector('#.name')
+      const email = form.querySelector('#.email')
+      const phone = form.querySelector('#.phone')
 
       let isValid = true
 
