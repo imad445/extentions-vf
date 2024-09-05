@@ -1459,11 +1459,7 @@ export const MultiOptionsExtension = {
           border-color: #ccc;
         }
         .option input[type="checkbox"]:checked + label {
-          color: white;
-        }
-        .option input[type="checkbox"]:checked + label::before {
-          background-color: #e60000;
-          border-color: #cc0000;
+          color: #333; /* Text remains visible */
         }
         .submit {
           background: linear-gradient(to right, #e60000, #cc0000);
@@ -1515,6 +1511,16 @@ export const MultiOptionsExtension = {
         .option input[type="checkbox"]:checked + label::before {
           background-color: #e60000;
           border-color: #cc0000;
+        }
+        /* Adding checkmark */
+        .option input[type="checkbox"]:checked + label::after {
+          content: '✓';
+          position: absolute;
+          top: 50%;
+          left: 4px;
+          transform: translateY(-50%);
+          font-size: 14px;
+          color: white;
         }
       </style>
 
@@ -1574,3 +1580,4 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
+
