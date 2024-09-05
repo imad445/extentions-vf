@@ -1444,25 +1444,21 @@ export const MultiOptionsExtension = {
         .option {
           display: flex;
           align-items: center;
-          margin-bottom: 20px;
-          padding: 12px;
-          border: 2px solid #f0f0f0;
+          margin-bottom: 15px;
+          padding: 10px;
+          border: 2px solid #ddd;
           border-radius: 8px;
           background-color: #f9f9f9;
           transition: background-color 0.3s ease, border-color 0.3s ease;
           cursor: pointer;
           position: relative;
+          font-size: 0.9em;
         }
         .option.selected {
           background-color: #e60000;
           border-color: #e60000;
-          color: white;
         }
-        .option.selected::before {
-          content: '✔';
-          position: absolute;
-          right: 15px;
-          font-size: 20px;
+        .option.selected label {
           color: white;
         }
         .option label {
@@ -1565,3 +1561,4 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
+
