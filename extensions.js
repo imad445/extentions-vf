@@ -1569,6 +1569,7 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
+
 export const CalendarExtension = {
   name: 'Calendar',
   type: 'response',
