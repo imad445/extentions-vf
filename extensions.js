@@ -1417,3 +1417,99 @@ export const SeatSelectorv2Extension = {
     element.appendChild(seatSelectorContainer)
   },
 }
+
+export const MultiOptionsExtension = {
+  name: 'MultiOptions',
+  type: 'response',
+  match: ({ trace }) =>
+    trace.type === 'ext_multioptions' || trace.payload.name === 'ext_multioptions',
+  render: ({ trace, element }) => {
+    const formContainer = document.createElement('form');
+
+    formContainer.innerHTML = `
+      <style>
+        form {
+          font-family: 'Arial', sans-serif;
+          background-color: #f9f9f9;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          max-width: 400px;
+          margin: auto;
+        }
+        label {
+          font-size: 0.9em;
+          color: #555;
+          display: block;
+          margin-bottom: 5px;
+        }
+        input[type="checkbox"] {
+          margin-right: 10px;
+        }
+        .option {
+          margin-bottom: 10px;
+        }
+        .submit {
+          background: linear-gradient(to right, #2e6ee1, #2e7ff1);
+          border: none;
+          color: white;
+          padding: 12px;
+          font-size: 1.1em;
+          font-weight: bold;
+          border-radius: 5px;
+          width: 100%;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+        .submit:hover {
+          background-color: #1a5bcf;
+        }
+      </style>
+
+      <div class="option">
+        <input type="checkbox" id="red" name="color" value="Red">
+        <label for="red">Red</label>
+      </div>
+
+      <div class="option">
+        <input type="checkbox" id="black" name="color" value="Black">
+        <label for="black">Black</label>
+      </div>
+
+      <div class="option">
+        <input type="checkbox" id="white" name="color" value="White">
+        <label for="white">White</label>
+      </div>
+
+      <div class="option">
+        <input type="checkbox" id="pink" name="color" value="Pink">
+        <label for="pink">Pink</label>
+      </div>
+
+      <input type="submit" class="submit" value="Submit">
+    `;
+
+    formContainer.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Collect selected options
+      const selectedOptions = Array.from(formContainer.querySelectorAll('input[name="color"]:checked'))
+        .map(checkbox => checkbox.value);
+
+      if (selectedOptions.length === 0) {
+        alert("Please select at least one option.");
+        return;
+      }
+
+      formContainer.querySelector('.submit').remove();
+
+      // Send selected options back to the chat
+      window.voiceflow.chat.interact({
+        type: 'complete',
+        payload: { selectedOptions },
+      });
+    });
+
+    element.appendChild(formContainer);
+  },
+}
