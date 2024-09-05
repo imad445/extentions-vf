@@ -1569,3 +1569,103 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
+export const CalendarExtension = {
+  name: 'Calendar',
+  type: 'response',
+  match: ({ trace }) =>
+    trace.type === 'ext_calendar' || trace.payload.name === 'ext_calendar',
+  render: ({ trace, element }) => {
+    const calendarContainer = document.createElement('div');
+
+    calendarContainer.innerHTML = `
+      <style>
+        .calendar-container {
+          font-family: 'Helvetica Neue', sans-serif;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          max-width: 350px;
+          margin: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .calendar-header {
+          font-size: 1.4em;
+          color: #e60000;
+          margin-bottom: 10px;
+          font-weight: bold;
+        }
+        .date-picker {
+          font-size: 1.2em;
+          padding: 10px;
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          width: 100%;
+          box-sizing: border-box;
+          text-align: center;
+          background-color: #f9f9f9;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+        .date-picker:hover {
+          background-color: #e6e6e6;
+        }
+        .submit {
+          background: linear-gradient(to right, #ff4d4d, #e60000);
+          border: none;
+          color: white;
+          padding: 10px;
+          font-size: 0.9em;
+          font-weight: bold;
+          border-radius: 8px;
+          width: 100%;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          margin-top: 15px;
+        }
+        .submit:hover {
+          background-color: #d10000;
+        }
+      </style>
+
+      <div class="calendar-container">
+        <div class="calendar-header">Select a Date</div>
+        <input type="text" class="date-picker" placeholder="MM/DD/YYYY" readonly>
+        <input type="submit" class="submit" value="Submit">
+      </div>
+    `;
+
+    const datePicker = calendarContainer.querySelector('.date-picker');
+
+    // Initialize the date picker
+    const initDatePicker = () => {
+      const picker = new Pikaday({
+        field: datePicker,
+        format: 'MM/DD/YYYY',
+        onSelect: function(date) {
+          datePicker.value = this.getMoment().format('MM/DD/YYYY');
+        }
+      });
+    };
+
+    initDatePicker();
+
+    calendarContainer.querySelector('.submit').addEventListener('click', function (event) {
+      event.preventDefault();
+      const selectedDate = datePicker.value;
+      if (!selectedDate || selectedDate === 'MM/DD/YYYY') {
+        alert('Please select a date.');
+        return;
+      }
+      // Send the selected date to the chat
+      window.voiceflow.chat.interact({
+        type: 'complete',
+        payload: { selectedDate },
+      });
+    });
+
+    element.appendChild(calendarContainer);
+  },
+}
