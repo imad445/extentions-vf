@@ -1429,18 +1429,23 @@ export const MultiOptionsExtension = {
     formContainer.innerHTML = `
       <style>
         form {
-          font-family: 'Arial', sans-serif;
-          background-color: #f9f9f9;
+          font-family: 'Helvetica Neue', sans-serif;
+          background-color: #fff;
           padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
           max-width: 400px;
           margin: auto;
+          transition: transform 0.3s ease;
+        }
+        form:hover {
+          transform: translateY(-5px);
         }
         label {
           font-size: 1em;
-          color: #333;
+          color: #555;
           margin-left: 10px;
+          transition: color 0.3s ease;
         }
         input[type="checkbox"] {
           display: none;
@@ -1448,33 +1453,70 @@ export const MultiOptionsExtension = {
         .option {
           display: flex;
           align-items: center;
-          margin-bottom: 15px;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          transition: border-color 0.3s ease, background-color 0.3s ease;
+          margin-bottom: 20px;
+          padding: 12px;
+          border: 2px solid #f0f0f0;
+          border-radius: 8px;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
           cursor: pointer;
+          background-color: #f9f9f9;
         }
         .option:hover {
           border-color: #ccc;
         }
         .option input[type="checkbox"]:checked + label {
-          color: #333; /* Text remains visible */
+          color: #e60000;
+        }
+        /* Modern checkbox design */
+        .option input[type="checkbox"] + label::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 10px;
+          transform: translateY(-50%);
+          width: 18px;
+          height: 18px;
+          border: 2px solid #ccc;
+          border-radius: 50%;
+          background-color: #fff;
+          transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .option input[type="checkbox"]:checked + label::before {
+          border-color: #e60000;
+          background-color: #e60000;
+        }
+        /* Checkmark */
+        .option input[type="checkbox"]:checked + label::after {
+          content: '✔';
+          position: absolute;
+          top: 50%;
+          left: 12px;
+          transform: translateY(-50%);
+          font-size: 14px;
+          color: white;
+          transition: opacity 0.3s ease;
+          opacity: 1;
+        }
+        .option label {
+          position: relative;
+          padding-left: 35px;
+          cursor: pointer;
+          transition: all 0.3s ease;
         }
         .submit {
-          background: linear-gradient(to right, #e60000, #cc0000);
+          background: linear-gradient(to right, #ff4d4d, #e60000);
           border: none;
           color: white;
-          padding: 12px;
+          padding: 14px;
           font-size: 1.1em;
           font-weight: bold;
-          border-radius: 5px;
+          border-radius: 10px;
           width: 100%;
           cursor: pointer;
-          transition: background-color 0.3s;
+          transition: background-color 0.3s ease;
         }
         .submit:hover {
-          background-color: #b30000;
+          background-color: #d10000;
         }
         .error-message {
           color: #e60000;
@@ -1484,47 +1526,22 @@ export const MultiOptionsExtension = {
           margin-top: 10px;
         }
         .form-header {
-          font-size: 1.2em;
-          color: #cc0000;
+          font-size: 1.4em;
+          color: #e60000;
           text-align: center;
           margin-bottom: 20px;
           font-weight: bold;
         }
-        .option input[type="checkbox"] + label {
-          position: relative;
-          padding-left: 25px;
-          cursor: pointer;
+        .option input[type="checkbox"] + label::after {
+          opacity: 0;
+          transition: opacity 0.3s ease;
         }
-        .option input[type="checkbox"] + label::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-          width: 16px;
-          height: 16px;
-          border: 2px solid #ccc;
-          border-radius: 3px;
-          background-color: #fff;
-          transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .option input[type="checkbox"]:checked + label::before {
-          background-color: #e60000;
-          border-color: #cc0000;
-        }
-        /* Adding checkmark */
         .option input[type="checkbox"]:checked + label::after {
-          content: '✓';
-          position: absolute;
-          top: 50%;
-          left: 4px;
-          transform: translateY(-50%);
-          font-size: 14px;
-          color: white;
+          opacity: 1;
         }
       </style>
 
-      <div class="form-header">Select Your Favorite Colors</div>
+      <div class="form-header">Choose Your Colors</div>
 
       <div class="option">
         <input type="checkbox" id="red" name="color" value="Red">
