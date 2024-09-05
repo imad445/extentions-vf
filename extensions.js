@@ -1441,15 +1441,6 @@ export const MultiOptionsExtension = {
         form:hover {
           transform: translateY(-5px);
         }
-        label {
-          font-size: 1em;
-          color: #555;
-          margin-left: 10px;
-          transition: color 0.3s ease;
-        }
-        input[type="checkbox"] {
-          display: none;
-        }
         .option {
           display: flex;
           align-items: center;
@@ -1457,50 +1448,28 @@ export const MultiOptionsExtension = {
           padding: 12px;
           border: 2px solid #f0f0f0;
           border-radius: 8px;
+          background-color: #f9f9f9;
           transition: background-color 0.3s ease, border-color 0.3s ease;
           cursor: pointer;
-          background-color: #f9f9f9;
           position: relative;
         }
-        .option:hover {
-          border-color: #ccc;
-        }
-        .option input[type="checkbox"]:checked + label {
-          color: #e60000;
-        }
-        .option input[type="checkbox"] + label::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 10px;
-          transform: translateY(-50%);
-          width: 18px;
-          height: 18px;
-          border: 2px solid #ccc;
-          border-radius: 50%;
-          background-color: #fff;
-          transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-        .option input[type="checkbox"]:checked + label::before {
-          border-color: #e60000;
+        .option.selected {
           background-color: #e60000;
+          border-color: #e60000;
+          color: white;
         }
-        .option input[type="checkbox"]:checked + label::after {
+        .option.selected::before {
           content: '✔';
           position: absolute;
-          top: 50%;
-          left: 12px;
-          transform: translateY(-50%);
-          font-size: 14px;
+          right: 15px;
+          font-size: 20px;
           color: white;
-          transition: opacity 0.3s ease;
-          opacity: 1;
         }
         .option label {
-          position: relative;
-          padding-left: 35px;
-          cursor: pointer;
-          transition: all 0.3s ease;
+          font-size: 1em;
+          color: #555;
+          margin-left: 10px;
+          transition: color 0.3s ease;
         }
         .submit {
           background: linear-gradient(to right, #ff4d4d, #e60000);
@@ -1531,35 +1500,24 @@ export const MultiOptionsExtension = {
           margin-bottom: 20px;
           font-weight: bold;
         }
-        .option input[type="checkbox"] + label::after {
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        .option input[type="checkbox"]:checked + label::after {
-          opacity: 1;
-        }
       </style>
 
       <div class="form-header">Choose Your Colors</div>
 
-      <div class="option">
-        <input type="checkbox" id="red" name="color" value="Red">
-        <label for="red">Red</label>
+      <div class="option" data-value="Red">
+        <label>Red</label>
       </div>
 
-      <div class="option">
-        <input type="checkbox" id="black" name="color" value="Black">
-        <label for="black">Black</label>
+      <div class="option" data-value="Black">
+        <label>Black</label>
       </div>
 
-      <div class="option">
-        <input type="checkbox" id="white" name="color" value="White">
-        <label for="white">White</label>
+      <div class="option" data-value="White">
+        <label>White</label>
       </div>
 
-      <div class="option">
-        <input type="checkbox" id="pink" name="color" value="Pink">
-        <label for="pink">Pink</label>
+      <div class="option" data-value="Pink">
+        <label>Pink</label>
       </div>
 
       <input type="submit" class="submit" value="Submit">
@@ -1567,30 +1525,32 @@ export const MultiOptionsExtension = {
       <div class="error-message">Please select at least one option.</div>
     `;
 
-    // Add click event listeners to each option
+    // Track selected options
+    const selectedOptions = new Set();
+
     formContainer.querySelectorAll('.option').forEach(option => {
       option.addEventListener('click', () => {
-        const checkbox = option.querySelector('input[type="checkbox"]');
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change')); // Trigger change event for styling
+        const value = option.getAttribute('data-value');
+        if (selectedOptions.has(value)) {
+          selectedOptions.delete(value);
+          option.classList.remove('selected');
+        } else {
+          selectedOptions.add(value);
+          option.classList.add('selected');
+        }
       });
     });
 
     formContainer.addEventListener('submit', function (event) {
       event.preventDefault();
 
-      const selectedOptions = Array.from(formContainer.querySelectorAll('input[name="color"]:checked'))
-        .map(checkbox => checkbox.value);
-
-      const errorMessage = formContainer.querySelector('.error-message');
-
       // Check if any options are selected
-      if (selectedOptions.length === 0) {
-        errorMessage.style.display = 'block';
+      if (selectedOptions.size === 0) {
+        formContainer.querySelector('.error-message').style.display = 'block';
         return;
       }
 
-      errorMessage.style.display = 'none';
+      formContainer.querySelector('.error-message').style.display = 'none';
 
       // Remove submit button to indicate form submission
       formContainer.querySelector('.submit').remove();
@@ -1598,7 +1558,7 @@ export const MultiOptionsExtension = {
       // Send selected options to the chat
       window.voiceflow.chat.interact({
         type: 'complete',
-        payload: { selectedOptions },
+        payload: { selectedOptions: Array.from(selectedOptions) },
       });
     });
 
