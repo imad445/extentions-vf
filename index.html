@@ -80,13 +80,15 @@
             },
           });
 
-          // Proactive message trigger
-          window.voiceflow.chat.proactive.push({
-            type: 'text',
-            payload: {
-              message: 'Need help?',
-            },
-          });
+          // Add a delay before pushing the proactive message
+          setTimeout(() => {
+            window.voiceflow.chat.proactive.push({
+              type: 'text',
+              payload: {
+                message: 'Need help?',
+              },
+            });
+          }, 3000); // 3-second delay
         };
         v.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
         v.type = 'text/javascript';
