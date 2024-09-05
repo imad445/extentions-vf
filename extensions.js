@@ -1438,19 +1438,18 @@ export const MultiOptionsExtension = {
           margin: auto;
         }
         label {
-          font-size: 0.9em;
-          color: #555;
-          display: block;
-          margin-bottom: 5px;
+          font-size: 1em;
+          color: #333;
+          margin-left: 10px;
         }
         input[type="checkbox"] {
           margin-right: 10px;
         }
         .option {
-          margin-bottom: 10px;
+          margin-bottom: 15px;
         }
         .submit {
-          background: linear-gradient(to right, #2e6ee1, #2e7ff1);
+          background: linear-gradient(to right, #e60000, #cc0000);
           border: none;
           color: white;
           padding: 12px;
@@ -1462,9 +1461,25 @@ export const MultiOptionsExtension = {
           transition: background-color 0.3s;
         }
         .submit:hover {
-          background-color: #1a5bcf;
+          background-color: #b30000;
+        }
+        .error-message {
+          color: #e60000;
+          font-size: 0.9em;
+          display: none;
+          text-align: center;
+          margin-top: 10px;
+        }
+        .form-header {
+          font-size: 1.2em;
+          color: #cc0000;
+          text-align: center;
+          margin-bottom: 20px;
+          font-weight: bold;
         }
       </style>
+
+      <div class="form-header">Select Your Favorite Colors</div>
 
       <div class="option">
         <input type="checkbox" id="red" name="color" value="Red">
@@ -1487,23 +1502,30 @@ export const MultiOptionsExtension = {
       </div>
 
       <input type="submit" class="submit" value="Submit">
+
+      <div class="error-message">Please select at least one option.</div>
     `;
 
     formContainer.addEventListener('submit', function (event) {
       event.preventDefault();
 
-      // Collect selected options
       const selectedOptions = Array.from(formContainer.querySelectorAll('input[name="color"]:checked'))
         .map(checkbox => checkbox.value);
 
+      const errorMessage = formContainer.querySelector('.error-message');
+
+      // Check if any options are selected
       if (selectedOptions.length === 0) {
-        alert("Please select at least one option.");
+        errorMessage.style.display = 'block';
         return;
       }
 
+      errorMessage.style.display = 'none';
+
+      // Remove submit button to indicate form submission
       formContainer.querySelector('.submit').remove();
 
-      // Send selected options back to the chat
+      // Send selected options to the chat
       window.voiceflow.chat.interact({
         type: 'complete',
         payload: { selectedOptions },
@@ -1513,3 +1535,4 @@ export const MultiOptionsExtension = {
     element.appendChild(formContainer);
   },
 }
+
