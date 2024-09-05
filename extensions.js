@@ -1434,7 +1434,7 @@ export const MultiOptionsExtension = {
           padding: 20px;
           border-radius: 12px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-          max-width: 400px;
+          max-width: 350px;
           margin: auto;
           transition: transform 0.3s ease;
         }
@@ -1444,15 +1444,16 @@ export const MultiOptionsExtension = {
         .option {
           display: flex;
           align-items: center;
-          margin-bottom: 15px;
-          padding: 10px;
+          margin-bottom: 10px;
+          padding: 8px;
           border: 2px solid #ddd;
           border-radius: 8px;
           background-color: #f9f9f9;
           transition: background-color 0.3s ease, border-color 0.3s ease;
           cursor: pointer;
-          position: relative;
-          font-size: 0.9em;
+          font-size: 0.8em;
+          width: calc(50% - 10px);
+          box-sizing: border-box;
         }
         .option.selected {
           background-color: #e60000;
@@ -1471,10 +1472,10 @@ export const MultiOptionsExtension = {
           background: linear-gradient(to right, #ff4d4d, #e60000);
           border: none;
           color: white;
-          padding: 14px;
-          font-size: 1.1em;
+          padding: 10px;
+          font-size: 0.9em;
           font-weight: bold;
-          border-radius: 10px;
+          border-radius: 8px;
           width: 100%;
           cursor: pointer;
           transition: background-color 0.3s ease;
@@ -1496,24 +1497,31 @@ export const MultiOptionsExtension = {
           margin-bottom: 20px;
           font-weight: bold;
         }
+        .options-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
       </style>
 
       <div class="form-header">Choose Your Colors</div>
 
-      <div class="option" data-value="Red">
-        <label>Red</label>
-      </div>
+      <div class="options-container">
+        <div class="option" data-value="Red">
+          <label>Red</label>
+        </div>
 
-      <div class="option" data-value="Black">
-        <label>Black</label>
-      </div>
+        <div class="option" data-value="Black">
+          <label>Black</label>
+        </div>
 
-      <div class="option" data-value="White">
-        <label>White</label>
-      </div>
+        <div class="option" data-value="White">
+          <label>White</label>
+        </div>
 
-      <div class="option" data-value="Pink">
-        <label>Pink</label>
+        <div class="option" data-value="Pink">
+          <label>Pink</label>
+        </div>
       </div>
 
       <input type="submit" class="submit" value="Submit">
