@@ -475,76 +475,88 @@ export const DateExtension = {
   render: ({ trace, element }) => {
     const formContainer = document.createElement('form')
 
-    // Get current date
+    // Get current date and time
     let currentDate = new Date()
     let minDate = new Date()
     minDate.setMonth(currentDate.getMonth() - 1)
     let maxDate = new Date()
     maxDate.setMonth(currentDate.getMonth() + 2)
 
-    // Convert to ISO string and remove time part
-    let minDateString = minDate.toISOString().slice(0, 10)
-    let maxDateString = maxDate.toISOString().slice(0, 10)
+    // Convert to ISO string and remove seconds and milliseconds
+    let minDateString = minDate.toISOString().slice(0, 16)
+    let maxDateString = maxDate.toISOString().slice(0, 16)
 
     formContainer.innerHTML = `
-          <style>
-            label {
-              font-size: 0.8em;
-              color: #888;
-            }
-            input[type="date"]::-webkit-calendar-picker-indicator {
-                border: none;
-                background: transparent;
-                border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-                bottom: 0;
-                outline: none;
-                color: transparent;
-                cursor: pointer;
-                height: auto;
-                left: 0;
-                position: absolute;
-                right: 0;
-                top: 0;
-                width: auto;
-                padding:6px;
-                font: normal 8px sans-serif;
-            }
-            .meeting input{
-              background: transparent;
-              border: none;
-              padding: 2px;
-              border-bottom: 0.5px solid rgba(255, 0, 0, 0.5); /* Red color */
-              font: normal 14px sans-serif;
-              outline:none;
-              margin: 5px 0;
-              &:focus{outline:none;}
-            }
-            .invalid {
-              border-color: red;
-            }
-            .submit {
-              background: linear-gradient(to right, #e12e2e, #f12e2e ); /* Red gradient */
-              border: none;
-              color: white;
-              padding: 10px;
-              border-radius: 5px;
-              width: 100%;
-              cursor: pointer;
-              opacity: 0.3;
-            }
-            .submit:enabled {
-              opacity: 1; /* Make the button fully opaque when it's enabled */
-            }
-          </style>
-          <label for="date">Select your date</label><br>
-          <div class="meeting"><input type="date" id="meeting" name="meeting" value="" min="${minDateString}" max="${maxDateString}" /></div><br>
-          <input type="submit" id="submit" class="submit" value="Submit" disabled="disabled">
-          `
+      <style>
+        label {
+          font-size: 0.9em;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 5px;
+          display: inline-block;
+        }
+        input[type="datetime-local"] {
+          background: transparent;
+          border: 1px solid #ccc;
+          padding: 8px;
+          border-radius: 5px;
+          font-size: 1em;
+          width: calc(100% - 16px);
+          margin-bottom: 10px;
+          outline: none;
+          transition: border-color 0.3s ease;
+        }
+        input[type="datetime-local"]:focus {
+          border-color: #d9534f; /* Red border when focused */
+        }
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+          border: none;
+          background: transparent;
+          position: absolute;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        .meeting input {
+          position: relative;
+        }
+        .invalid {
+          border-color: red;
+        }
+        .submit {
+          background: linear-gradient(to right, #d9534f, #c9302c); /* Red gradient */
+          border: none;
+          color: white;
+          padding: 12px;
+          border-radius: 5px;
+          width: 100%;
+          cursor: pointer;
+          font-size: 1em;
+          opacity: 0.3;
+          transition: opacity 0.3s ease;
+        }
+        .submit:enabled {
+          opacity: 1; /* Make the button fully opaque when it's enabled */
+        }
+        form {
+          max-width: 400px;
+          margin: 0 auto;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+      </style>
+      <label for="date">Select your date/time</label>
+      <div class="meeting">
+        <input type="datetime-local" id="meeting" name="meeting" value="" min="${minDateString}" max="${maxDateString}" />
+      </div>
+      <input type="submit" id="submit" class="submit" value="Submit" disabled="disabled">
+    `
 
     const submitButton = formContainer.querySelector('#submit')
-    const dateInput = formContainer.querySelector('#meeting')
+    const datetimeInput = formContainer.querySelector('#meeting')
 
-    dateInput.addEventListener('input', function () {
+    datetimeInput.addEventListener('input', function () {
       if (this.value) {
         submitButton.disabled = false
       } else {
@@ -554,14 +566,15 @@ export const DateExtension = {
     formContainer.addEventListener('submit', function (event) {
       event.preventDefault()
 
-      const date = dateInput.value
-      console.log(date)
+      const datetime = datetimeInput.value
+      console.log(datetime)
+      let [date, time] = datetime.split('T')
 
       formContainer.querySelector('.submit').remove()
 
       window.voiceflow.chat.interact({
         type: 'complete',
-        payload: { date: date },
+        payload: { date: date, time: time },
       })
     })
     element.appendChild(formContainer)
